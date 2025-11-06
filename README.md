@@ -1,5 +1,6 @@
 # SPRINT4_EDGE
 # Challenge - First Year - Edge Computing: Alerta Leitos
+# Link para o projeto no Wokwi: https://wokwi.com/projects/433394479956961281
 
 ## Resumo
 O projeto **Alerta-Leitos** é um sistema de monitoramento inteligente de leitos hospitalares, desenvolvido com o foco em melhorar a gestão hospitalar através da **Internet das Coisas (IoT)**, unindo hardware, automação e nuvem para fornecer alertas em tempo real e dados confiáveis sobre a ocupação dos leitos.
