@@ -26,11 +26,14 @@ A parte física do sistema é composta por componentes simples e de baixo custo,
 1.  **Arduino Uno**: Microcontrolador responsável por ler as entradas (botão), controlar as saídas (LEDs, servo, LCD) e enviar os dados ao Node-RED.
 2.  **Servo Motor**: Utilizado como indicador físico do status do leito, girando para diferentes ângulos conforme a ocupação. Seguem aqui as descrições dos ângulos e seus respectivos estados:
     * **0°**: Leito Ocupado
+    * **75°**: Desocupando
+    * **108°**: Desocupado
     * **36°**: Iniciando Limpeza
     * **72°**: Finalizando Limpeza
     * **108°**: Iniciando Manutenção
     * **144°**: Finalizando Manutenção
-    * **180°**: Desocupado / Leito Pronto
+    * **190°**: Leito Pronto
+    * **40°**: Ocupando Pronto
 3.  **Seis LEDs**: Indicação visual complementar ao servo motor e ao LCD, representando os diferentes estados:
     * **Vermelho (ledR)**: Leito Ocupado
     * **Amarelo (ledY)**: Iniciando Manutenção
@@ -41,6 +44,7 @@ A parte física do sistema é composta por componentes simples e de baixo custo,
 4.  **Botão de Acionamento**: Permite a mudança manual dos estados do leito no próprio hardware.
 5.  **Display LCD 16x2 I2C**: Exibe o número do leito, a hora atual e o status, fornecendo feedback direto no ambiente hospitalar.
 6.  **Módulo RTC DS1307**: Real-Time Clock para manter a hora e a data, garantindo a precisão dos dados de tempo.
+7.  **Buzzer**: Alerta toda vez que o leito muda de status.
 
 Este conjunto garante um feedback local direto no ambiente hospitalar, mesmo sem acesso à plataforma digital.
 
@@ -59,7 +63,7 @@ Simultaneamente, o Arduino envia esses dados (número do leito, status e hora) e
 
 1.  **Configure o Arduino**:
     * Conecte o Arduino Uno, o servo motor, os seis LEDs, o botão, o display LCD I2C e o módulo RTC conforme as especificações do circuito.
-    * Instale as bibliotecas necessárias na Arduino IDE: `Servo`, `ArduinoJson`, `LiquidCrystal_I2C` e `RTClib`.
+    * Instale as bibliotecas necessárias na Arduino IDE: `Servo`, `ArduinoJson`, `LiquidCrystal_I2C`, `Wire`  e `RTClib`.
     * Carregue o código Arduino fornecido para o microcontrolador via Arduino IDE.
 2.  **Instale o Node-RED**: Instale o Node-RED localmente ou em um servidor.
 3.  **Importe o Fluxo Node-RED**: Importe o fluxo `.json` do projeto para o Node-RED. Certifique-se de configurar um nó de entrada serial para receber os dados do Arduino.
