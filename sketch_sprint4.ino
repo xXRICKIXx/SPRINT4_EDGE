@@ -12,10 +12,11 @@
 #define ledO 7
 #define botao 8
 #define servoPin 9
+#define buzzer 10  
 
 Servo servo1;
 LiquidCrystal_I2C lcd(0x27, 16, 2);
-RTC_DS1307 rtc;  
+RTC_DS1307 rtc; 
 
 String status = "Ocupado";
 int estadoAtual = 0;
@@ -32,13 +33,13 @@ void setup() {
   pinMode(ledC, OUTPUT);
   pinMode(ledO, OUTPUT);
   pinMode(botao, INPUT_PULLUP);
+  pinMode(buzzer, OUTPUT);  
 
   servo1.attach(servoPin);
 
   lcd.init();
   lcd.backlight();
 
-  // Inicializa RTC
   if (! rtc.begin()) {
     Serial.println("RTC nao detectado!");
     while (1);
@@ -50,7 +51,7 @@ void setup() {
 void loop() {
   if (digitalRead(botao) == LOW && !botaoPressionado) {
     botaoPressionado = true;
-    estadoAtual = (estadoAtual + 1) % 6;
+    estadoAtual = (estadoAtual + 1) % 9;
     atualizarSistema();
   }
   if (digitalRead(botao) == HIGH) {
@@ -59,7 +60,7 @@ void loop() {
 
   if (Serial.available() > 0) {
     char c = Serial.read();
-    if (c >= '0' && c <= '5') {
+    if (c >= '0' && c <= '8') {   
       estadoAtual = c - '0';
       atualizarSistema();
     }
@@ -69,9 +70,12 @@ void loop() {
 }
 
 void atualizarSistema() {
-  
-  digitalWrite(ledR, LOW); digitalWrite(ledY, LOW); digitalWrite(ledG, LOW);
-  digitalWrite(ledP, LOW); digitalWrite(ledC, LOW); digitalWrite(ledO, LOW);
+  digitalWrite(ledR, LOW); 
+  digitalWrite(ledY, LOW); 
+  digitalWrite(ledG, LOW);
+  digitalWrite(ledP, LOW); 
+  digitalWrite(ledC, LOW); 
+  digitalWrite(ledO, LOW);
 
   switch (estadoAtual) {
     case 0:
@@ -81,35 +85,49 @@ void atualizarSistema() {
       break;
     case 1:
       digitalWrite(ledY, HIGH);
-      servo1.write(108);
-      status = "Iniciando manut.";
+      servo1.write(75);
+      status = "Desocupando";
       break;
     case 2:
       digitalWrite(ledG, HIGH);
-      servo1.write(180);
+      servo1.write(108);
       status = "Desocupado";
       break;
     case 3:
-      digitalWrite(ledC, HIGH);
-      servo1.write(36);
-      status = "Iniciando limpa.";
+      digitalWrite(ledG, HIGH);
+      servo1.write(180);
+      status = "Iniciando manut.";
       break;
     case 4:
-      digitalWrite(ledO, HIGH);
-      servo1.write(72);
-      status = "Finaliza limpa.";
-      break;
-    case 5:
-      digitalWrite(ledP, HIGH);
-      servo1.write(144);
+      digitalWrite(ledC, HIGH);
+      servo1.write(36);
       status = "Finaliza manut.";
       break;
-    case 6: // Novo estado: Leito Pronto
+    case 5:
+      digitalWrite(ledO, HIGH);
+      servo1.write(72);
+      status = "Iniciando limpa.";
+      break;
+    case 6:
+      digitalWrite(ledP, HIGH);
+      servo1.write(144);
+      status = "Finaliza limpa.";
+      break;
+    case 7:
       digitalWrite(ledG, HIGH); 
-      servo1.write(180);        
+      servo1.write(190);        
       status = "Leito Pronto"; 
       break;
+    case 8:
+      digitalWrite(ledY, HIGH);
+      servo1.write(40);
+      status = "Ocupando leito";
+      break;
   }
+
+  tone(buzzer, 1000, 200);  
+  delay(250);               
+  noTone(buzzer);
 
   exibirDados(leitoNum, status);
   enviaJson(leitoNum, status);
