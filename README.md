@@ -33,7 +33,7 @@ A parte física do sistema é composta por componentes simples e de baixo custo,
     * **108°**: Iniciando Manutenção
     * **144°**: Finalizando Manutenção
     * **190°**: Leito Pronto
-    * **40°**: Ocupando Pronto
+    * **40°**: Ocupando Leito
 3.  **Seis LEDs**: Indicação visual complementar ao servo motor e ao LCD, representando os diferentes estados:
     * **Vermelho (ledR)**: Leito Ocupado
     * **Amarelo (ledY)**: Iniciando Manutenção
